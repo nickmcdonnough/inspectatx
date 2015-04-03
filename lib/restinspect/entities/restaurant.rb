@@ -3,9 +3,15 @@ module RestInspect
     has_many :inspections, foreign_key: :facility_id, primary_key: :facility_id
 
     def self.geographic_lookup search_data, inequality, score, where_type
-      select = "DISTINCT name, address, restaurants.facility_id, ST_AsGeoJSON(the_geom) as gj"
-      where1 = "inspections.score #{getinequality(inequality)} #{score}"
-      where2 = build_where_clause search_data, where_type
+      select = %q[
+        DISTINCT
+          name
+          , address
+          , restaurants.facility_id
+          , ST_AsGeoJSON(the_geom) as gj
+      ]
+      where1 = %Q[inspections.score #{getinequality(inequality)} #{score}]
+      where2 = build_main_where search_data, where_type
 
       self
         .joins(:inspections)
@@ -16,14 +22,14 @@ module RestInspect
 
     private
 
-    def self.build_where_clause search_data, type
+    def self.build_main_where search_data, type
       case type
       when 'bounds'
-        "ST_Contains(ST_MakeEnvelope(#{search_data}, 4326), the_geom)"
+        %Q[ST_Contains(ST_MakeEnvelope(#{search_data}, 4326), the_geom)]
       when 'zip'
-        "zip = '#{search_data}'"
+        %Q[zip = '#{search_data}']
       when 'name'
-        "lower(restaurants.name) LIKE '%#{search_data.downcase}%'"
+        %Q[lower(restaurants.name) LIKE '%#{search_data.downcase}%']
       else
         ''
       end
