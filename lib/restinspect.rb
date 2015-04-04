@@ -1,3 +1,6 @@
+require 'json'
+require 'active_record'
+
 require_relative 'restinspect/entities/restaurant.rb'
 require_relative 'restinspect/entities/inspection.rb'
 
