@@ -10,7 +10,7 @@ class RestInspectServer < Sinatra::Application
   end
 
   get '/' do
-    send_file 'index.html'
+    erb :index
   end
 
   post '/search' do
