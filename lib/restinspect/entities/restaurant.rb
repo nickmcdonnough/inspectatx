@@ -2,7 +2,7 @@ module RestInspect
   class Restaurant < ActiveRecord::Base
     has_many :inspections, foreign_key: :facility_id, primary_key: :facility_id
 
-    def self.geographic_lookup search_data, inequality, score, where_type
+    def self.lookup search_data, inequality, score, where_type
       select = %q[
         DISTINCT
           name
@@ -24,9 +24,9 @@ module RestInspect
 
     def self.build_main_where search_data, type
       case type
-      when 'bounds'
+      when 'mapview'
         %Q[ST_Contains(ST_MakeEnvelope(#{search_data}, 4326), the_geom)]
-      when 'zip'
+      when 'zipcode'
         %Q[zip = '#{search_data}']
       when 'name'
         %Q[lower(restaurants.name) LIKE '%#{search_data.downcase}%']
