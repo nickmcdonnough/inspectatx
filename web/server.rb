@@ -1,13 +1,10 @@
 require 'sinatra'
 require 'json'
-require_relative '../lib/restinspect.rb'
+
+require 'pry-byebug'
 
 class RestInspectServer < Sinatra::Application
   attr_reader :params
-
-  before '/search' do
-    @params = JSON.parse request.body.read
-  end
 
   get '/' do
     erb :index
@@ -17,7 +14,7 @@ class RestInspectServer < Sinatra::Application
     results = RestInspect::Lookup.run params
 
     data = if results.success?
-      RestInspect::PrepResults.run results.data
+      RestInspect::BuildGeoJSON.run results.data
     else
       {}
     end
