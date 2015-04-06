@@ -14,7 +14,7 @@ L.tileLayer('http://a.tiles.mapbox.com/v3/snapdemos.map-l2vbhlkj/{z}/{x}/{y}.png
   key: '8db088f2c08348c29c0c1443a46654ca'
 }).addTo(map);
 
-map.setView([30.272920898023475, -97.74438629799988], 12);
+map.setView([30.272920898023475, -97.74438629799988], 14);
 
 var layers = {
   saveGeoJson: function (geoJson) {
@@ -26,18 +26,33 @@ var layers = {
       }
     });
 
-    var markerClusters = new L.MarkerClusterGroup();
+    var markerClusters = new L.MarkerClusterGroup({
+      spiderfyOnMaxZoom: true,
+      showCoverageOnHover: true,
+      zoomToBoundsOnClick: true
+    });
+
     markerClusters.addLayer(this.geoJson);
     map.addLayer(markerClusters);
+    this.clusters = markerClusters;
   },
-  geoJson: L.marker([30.272920898023475, -97.74438629799988])
+  geoJson: new L.marker(),
+  clusters: new L.MarkerClusterGroup()
 }
 
 //
 // map listeners & controls
 //
 
-var setViewBounds = function () {
+// disable map dragging when control is being used.
+$('.info').mousedown(function () { map.dragging.disable(); });
+$('.info').mouseup(function () { map.dragging.enable(); });
+
+// put boundaries into search box when map is dragged or zoomed
+map.on('dragend', function (x) { setViewBounds(); });
+map.on('zoomend', function (x) { setViewBounds(); });
+
+function setViewBounds () {
   var searchType = $('#search-type').val();
 
   if (searchType === 'mapview') {
@@ -53,19 +68,16 @@ var setViewBounds = function () {
   }
 }
 
-map.on('dragend', function (x) { setViewBounds(); });
-map.on('zoomend', function (x) { setViewBounds(); });
-
 function drawMap (geoJson) {
   geoJson.forEach(function (feature) {
     var popupProfile = buildPopupProfile(feature);
     feature.properties.popupContent = popupProfile;
   });
 
-  map.removeLayer(layers.geoJson);
+  map.removeLayer(layers.clusters); // not working...
   layers.saveGeoJson(geoJson);
   map.fitBounds(layers.geoJson)
-};
+}
 
 function buildPopupProfile (feature) {
   var rowSource = $('#score-entry').html();
