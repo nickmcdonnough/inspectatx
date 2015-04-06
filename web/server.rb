@@ -1,8 +1,6 @@
 require 'sinatra'
 require 'json'
 
-require 'pry-byebug'
-
 class RestInspectServer < Sinatra::Application
   attr_reader :params
 
