@@ -1,0 +1,7 @@
+production:
+  adapter: postgresql
+  encoding: unicode
+  database: inspectatxdb
+  pool: 15
+  username:
+  password:
