@@ -45,8 +45,8 @@ var layers = {
 //
 
 // disable map dragging when control is being used.
-$('.info').mousedown(function () { map.dragging.disable(); });
-$('.info').mouseup(function () { map.dragging.enable(); });
+$('.control').mousedown(function () { map.dragging.disable(); });
+$('.control').mouseup(function () { map.dragging.enable(); });
 
 // put boundaries into search box when map is dragged or zoomed
 map.on('dragend', function (x) { setViewBounds(); });
