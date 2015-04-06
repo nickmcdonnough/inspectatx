@@ -4,6 +4,8 @@
 
 This is a small app that allows a user to search for restaurant inspections conducted by the City of Austin. Users can search for inspections by restaurant name, zip code, or by map view (just locations inside the current map).
 
+The app is live on Heroku and can be viewed at: [http://inspectatx.herokuapp.com](http://inspectatx.herokuapp.com)
+
 ### Tools
 
 - Sinatra
