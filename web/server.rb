@@ -1,11 +1,13 @@
 require 'sinatra'
 require 'json'
+require 'dalli'
 
 class RestInspectServer < Sinatra::Application
-  attr_reader :params
+
+  set :cache, Dalli::Client.new
 
   before '/search' do
-    @params = JSON.parse request.body.read
+    @cache = settings.cache.get(params)
   end
 
   get '/' do
@@ -13,6 +15,8 @@ class RestInspectServer < Sinatra::Application
   end
 
   post '/search' do
+    return @cache if @cache
+
     results = RestInspect::Lookup.run params
 
     data = if results.success?
@@ -21,6 +25,9 @@ class RestInspectServer < Sinatra::Application
       {}
     end
 
-    JSON.generate(data)
+    data = JSON.generate(data)
+    settings.cache.set(params, data)
+    data
   end
+
 end
