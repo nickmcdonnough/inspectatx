@@ -4,6 +4,10 @@ require 'json'
 class RestInspectServer < Sinatra::Application
   attr_reader :params
 
+  before '/search' do
+    @params = JSON.parse request.body.read
+  end
+
   get '/' do
     erb :index
   end
