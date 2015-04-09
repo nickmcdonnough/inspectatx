@@ -24,6 +24,7 @@ GEM
       columnize (= 0.9.0)
     coderay (1.1.0)
     columnize (0.9.0)
+    dalli (2.7.4)
     i18n (0.7.0)
     json (1.8.2)
     method_source (0.8.2)
@@ -57,6 +58,7 @@ PLATFORMS
 DEPENDENCIES
   active_record_tasks
   activerecord
+  dalli
   pg
   pry-byebug
   sinatra

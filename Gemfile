@@ -1,5 +1,7 @@
 source 'http://rubygems.org'
 
+gem 'dalli'
+
 group :production do
   gem 'sinatra'
   gem 'pg'
