@@ -1,0 +1,9 @@
+{
+  'name': 'InspectATX!',
+  'version': '0.1',
+  'dependencies': {
+    'handlebars': 'latest',
+    'leaflet.markercluster': 'latest'
+  },
+  'directory': 'web/public/js'
+}
