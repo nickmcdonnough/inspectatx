@@ -104,7 +104,7 @@ $('#search-type').change(function (e) {
   var searchType = $('#search-type').val();
 
   if (searchType === 'mapview') {
-    $('#search-query').val('');
+    setViewBounds();
     $('#search-query').prop('disabled', true);
   } else {
     $('#search-query').prop('disabled', false);
