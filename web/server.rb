@@ -3,11 +3,13 @@ require 'json'
 require 'dalli'
 
 class RestInspectServer < Sinatra::Application
+  attr_reader :params, :cash
 
   set :cache, Dalli::Client.new
 
   before '/search' do
-    @cache = settings.cache.get(params)
+    @params = JSON.parse request.body.read
+    @cash = settings.cache.get params unless params.empty?
   end
 
   get '/' do
@@ -15,7 +17,7 @@ class RestInspectServer < Sinatra::Application
   end
 
   post '/search' do
-    return @cache if @cache
+    return cash if cash
 
     results = RestInspect::Lookup.run params
 
