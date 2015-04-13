@@ -45,15 +45,16 @@ var layers = {
 //
 
 // disable map dragging when control is being used.
-$('.control').mousedown(function () { map.dragging.disable(); });
-$('.control').mouseup(function () { map.dragging.enable(); });
+
+document.getElementById('control').onmousedown = function ()  {map.dragging.disable() }
+document.getElementById('control').onmouseup = function () { map.dragging.enable() }
 
 // put boundaries into search box when map is dragged or zoomed
 map.on('dragend', function (x) { setViewBounds(); });
 map.on('zoomend', function (x) { setViewBounds(); });
 
 function setViewBounds () {
-  var searchType = $('#search-type').val();
+  var searchType = document.getElementById('search-type').value;
 
   if (searchType === 'mapview') {
     var mapBounds = map.getBounds();
@@ -64,7 +65,7 @@ function setViewBounds () {
       mapBounds._northEast.lat
     ].join(',');
 
-    $('#search-query').val(boundaryData);
+    document.getElementById('search-query').value = boundaryData;
   }
 }
 
@@ -74,14 +75,14 @@ function drawMap (geoJson) {
     feature.properties.popupContent = popupProfile;
   });
 
-  map.removeLayer(layers.clusters); // not working...
+  map.removeLayer(layers.clusters);
   layers.saveGeoJson(geoJson);
   map.fitBounds(layers.geoJson)
 }
 
 function buildPopupProfile (feature) {
-  var rowSource = $('#score-entry').html();
-  var profileSource = $('#marker-popup').html();
+  var rowSource = document.getElementById('score-entry').innerHTML;
+  var profileSource = document.getElementById('marker-popup').innerHTML;
   var rowTemplate = Handlebars.compile(rowSource);
   var profileTemplate = Handlebars.compile(profileSource);
 
@@ -100,43 +101,46 @@ function buildPopupProfile (feature) {
 // search listeners
 //
 
-$('#search-type').change(function (e) {
-  var searchType = $('#search-type').val();
+document.getElementById('search-type').onchange = function () {
+  var searchBox = document.getElementById('search-query');
+  var searchType = document.getElementById('search-type').value;
 
   if (searchType === 'mapview') {
     setViewBounds();
-    $('#search-query').prop('disabled', true);
+    searchBox.disabled = true;
   } else {
-    $('#search-query').prop('disabled', false);
+    searchBox.value = '';
+    searchBox.disabled = false;
   }
-});
+};
 
-$('#submit').click(function () {
+document.getElementById('submit').onclick = function () {
   var searchParams = {
-    type: $('#search-type').val(),
-    query: $('#search-query').val(),
-    sign: $('#search-inequality').val(),
-    score: $('#search-score').val(),
-    when: $('#search-when').val()
+    type: document.getElementById('search-type').value,
+    query: document.getElementById('search-query').value,
+    sign: document.getElementById('search-inequality').value,
+    score: document.getElementById('search-score').value,
+    when: document.getElementById('search-when').value
   }
 
   facilitySearch(searchParams);
-});
+};
 
 //
 // api stuff.
 //
 
 function facilitySearch (searchParams) {
-  $.ajax({
-    url: '/search',
-    type: 'POST',
-    data: searchParams,
-    success: function (data) {
-      geoJson = JSON.parse(data).results;
-      drawMap(geoJson);
-    },
-    error: function (error) { alert('failure!'); console.log(error); }
-  });
+  var httpRequest = new XMLHttpRequest();
+
+  if (!httpRequest) { alert('can\'t make request!'); return false; }
+
+  httpRequest.open('POST', '/search', true);
+  httpRequest.onload = function () {
+    var geoJson = JSON.parse(this.responseText).results;
+    drawMap(geoJson)
+  };
+  httpRequest.setRequestHeader('Content-Type', 'application/json');
+  httpRequest.send(JSON.stringify(searchParams));
 }
 
