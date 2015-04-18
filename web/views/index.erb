@@ -1,6 +1,7 @@
 <!doctype html>
 <head>
   <title>InspectATX</title>
+  <link rel='stylesheet' href='/css/app_styles.css'>
   <link rel='stylesheet' href='/css/normalize.css'>
   <link rel='stylesheet' href='/css/skeleton.css'>
   <link rel='stylesheet' href='/bower_components/leaflet.markercluster/dist/MarkerCluster.css'>
@@ -10,48 +11,6 @@
   <script src='/bower_components/leaflet.markercluster/dist/leaflet.markercluster-src.js'></script>
   <script src='/bower_components/handlebars/handlebars.min.js'></script>
 
-  <style type='text/css'>
-    #search-query { text-align: center; }
-    .results, .info {
-      text-align: center;
-      padding: 6px 8px;
-      background: rgba(255,255,255,0.9);
-      box-shadow: 0 0 15px rgba(0,0,0,0.2);
-      border-radius: 5px;
-    }
-
-    .results {
-      height: 0px auto; width: 300px;
-    }
-
-    header.search-feature {
-      height: 60px;
-      background: #757696;
-    }
-
-    header.search-feature .search-control {
-      text-align: center;
-      top: 60px;
-      padding: 10px;
-    }
-
-    .main {
-      position: absolute;
-      top: 60px;
-      right: 0;
-      bottom: 0;
-      left: 0;
-    }
-
-    .main .map {
-      float: left;
-      height: 100%;
-      position: relative;
-      width: 100%;
-    }
-
-    form { display: inline; }
-  </style>
   <meta name='viewport' content='width=device-width, height=device-height, initial-scale=1.0, maximum-scale=1.0, user-scalable=no' />
 </head>
 <body>
@@ -80,6 +39,7 @@ Facility ID: {{facilityid}}
 
 <div class='app'>
   <header class='search-feature'>
+    <div class='logo'>InspectATX</div>
     <div class='search-control'>
       <select id='search-type'>
         <option value='zipcode'>Zip code</option>

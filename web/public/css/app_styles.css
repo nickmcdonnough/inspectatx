@@ -1,0 +1,45 @@
+#search-query { text-align: center; }
+
+.results, .info {
+  text-align: center;
+  padding: 6px 8px;
+  background: rgba(255,255,255,0.9);
+  box-shadow: 0 0 15px rgba(0,0,0,0.2);
+  border-radius: 5px;
+}
+
+.results {
+  min-width: 300px;
+  min-height: 300px;
+  height: auto; width: auto;
+}
+
+header.search-feature {
+  height: 60px;
+  background: #757696;
+  padding: 10px;
+}
+
+header.search-feature .search-control {
+}
+
+header.search-feature .logo {
+  float: left;
+}
+
+.main {
+  position: absolute;
+  top: 60px;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+
+.main .map {
+  float: left;
+  height: 100%;
+  position: relative;
+  width: 100%;
+}
+
+form { display: inline; }

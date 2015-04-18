@@ -23,6 +23,10 @@ var layers = {
         if (feature.properties && feature.properties.popupContent) {
           layer.bindPopup(feature.properties.popupContent);
         }
+
+        //layer.on('click', function (e) {
+        //  $_('control').innerHTML = this.feature.geometry.properties.profile;
+        //});
       }
     });
 
@@ -71,16 +75,17 @@ function setViewBounds () {
 
 function drawMap (geoJson) {
   geoJson.forEach(function (feature) {
-    var popupProfile = buildPopupProfile(feature);
-    feature.properties.popupContent = popupProfile;
+    var profile = buildProfile(feature);
+    feature.properties.popupContent = feature.properties.name;
+    feature.properties.profile = profile;
   });
 
   map.removeLayer(layers.clusters);
   layers.saveGeoJson(geoJson);
-  map.fitBounds(layers.geoJson)
+  map.fitBounds(layers.geoJson);
 }
 
-function buildPopupProfile (feature) {
+function buildProfile (feature) {
   var rowSource = $_('score-entry').innerHTML;
   var profileSource = $_('marker-popup').innerHTML;
   var rowTemplate = Handlebars.compile(rowSource);
